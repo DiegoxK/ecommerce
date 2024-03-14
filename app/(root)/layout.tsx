@@ -2,14 +2,11 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-type LayoutProps = {
+type SetupLayoutProps = {
   children: React.ReactNode;
-  params: {
-    storeId: string;
-  };
 };
 
-export default async function layout({ children, params }: LayoutProps) {
+export default async function SetupLayout({ children }: SetupLayoutProps) {
   const { userId } = auth();
 
   if (!userId) {
@@ -18,19 +15,13 @@ export default async function layout({ children, params }: LayoutProps) {
 
   const store = await prismadb.store.findFirst({
     where: {
-      id: params.storeId,
       userId,
     },
   });
 
-  if (!store) {
-    redirect("/");
+  if (store) {
+    redirect(`/${store.id}`);
   }
 
-  return (
-    <>
-      <div>Nabvbar!</div>
-      {children}
-    </>
-  );
+  return <div>layout</div>;
 }
