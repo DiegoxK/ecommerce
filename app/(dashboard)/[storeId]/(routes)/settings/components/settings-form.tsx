@@ -47,7 +47,9 @@ export default function SettingsForm({ initialData }: SettingsFormProps) {
       setLoading(true);
 
       await axios.patch(`/api/stores/${params.storeId}`, data);
-      console.log(data);
+
+      router.refresh();
+      toast.success("Store updated.");
     } catch (error) {
       toast.error("An error occurred. Please try again.");
     } finally {
