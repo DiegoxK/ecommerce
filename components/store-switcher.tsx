@@ -105,6 +105,7 @@ export default function StoreSwitcher({
           <CommandList>
             <CommandGroup>
               <CommandItem
+                className="cursor-pointer"
                 onSelect={() => {
                   setOpen(false);
                   storeModal.onOpen();
