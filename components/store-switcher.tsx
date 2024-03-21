@@ -57,8 +57,6 @@ export default function StoreSwitcher({
     router.push(`/${store.value}`);
   };
 
-  console.log(params);
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>

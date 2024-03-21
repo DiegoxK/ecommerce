@@ -1,4 +1,5 @@
 "use client";
+import AlertModal from "@/components/modals/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -57,15 +58,37 @@ export default function SettingsForm({ initialData }: SettingsFormProps) {
     }
   };
 
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/stores/${params.storeId}`);
+      router.refresh();
+      toast.success("Store deleted.");
+    } catch (error) {
+      toast.error(
+        "Make sure you removed all products and categories before deleting the store."
+      );
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
+  };
+
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
+        loading={loading}
+      />
       <div className="flex items-center justify-between">
         <Heading title="Settings" description="Manage store preferences." />
         <Button
           disabled={loading}
           variant="destructive"
-          size="sm"
-          onClick={() => {}}
+          size="icon"
+          onClick={() => setOpen(true)}
         >
           <Trash className="h-4 w-4" />
         </Button>
