@@ -1,5 +1,6 @@
 "use client";
 import AlertModal from "@/components/modals/alert-modal";
+import ApiAlert from "@/components/ui/api-alert";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -123,6 +124,12 @@ export default function SettingsForm({ initialData }: SettingsFormProps) {
           </Button>
         </form>
       </Form>
+      <Separator />
+      <ApiAlert
+        variant="public"
+        title="NEXT_PUBLIC_API_URL"
+        description="test-desc"
+      />
     </>
   );
 }
