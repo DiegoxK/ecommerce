@@ -36,8 +36,8 @@ model Billboard {
 
 model Category {
   id          String    @id @default(uuid())
-  storreId    String
-  store       Store     @relation("StoreToCategory", fields: [storreId], references: [id])
+  storeId     String
+  store       Store     @relation("StoreToCategory", fields: [storeId], references: [id])
   billboardId String
   billboard   Billboard @relation("BillboardToCategory", fields: [billboardId], references: [id])
   name        String

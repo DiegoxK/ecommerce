@@ -40,7 +40,7 @@ export default function StoreModal() {
       setLoading(true);
       const response = await axios.post("/api/stores", values);
 
-      window.location.assign(`/${response.data.id}`);
+      window.location.assign(`/${response.data.store.id}`);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
