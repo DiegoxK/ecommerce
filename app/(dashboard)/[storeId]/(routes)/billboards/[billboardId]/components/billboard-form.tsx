@@ -67,8 +67,9 @@ export default function BillboardForm({ initialData }: BillboardFormProps) {
         await axios.post(`/api/${params.storeId}/billboards`, data);
       }
 
-      router.refresh();
-      router.push(`/${params.storeId}/billboards`);
+      // router.refresh();
+      // router.push(`/${params.storeId}/billboards`);
+      window.location.assign(`/${params.storeId}/billboards`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("An error occurred. Please try again.");
@@ -84,6 +85,7 @@ export default function BillboardForm({ initialData }: BillboardFormProps) {
         `/api/${params.storeId}/billboards/${params.billboardId}`
       );
       router.refresh();
+      router.push(`/${params.storeId}/billboards`);
       toast.success("Billboard deleted.");
     } catch (error) {
       toast.error(
@@ -165,7 +167,6 @@ export default function BillboardForm({ initialData }: BillboardFormProps) {
           </Button>
         </form>
       </Form>
-      <Separator />
     </>
   );
 }

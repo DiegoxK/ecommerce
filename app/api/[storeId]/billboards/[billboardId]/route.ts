@@ -17,7 +17,7 @@ export async function GET(
       },
     });
 
-    return NextResponse.json({ mesasge: "Billboard deleted", billboard });
+    return NextResponse.json(billboard);
   } catch (error) {
     console.log("[BILLBOARD_GET]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
@@ -71,7 +71,7 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(billboard);
+    return NextResponse.json({ mesasge: "Billboard updated", billboard });
   } catch (error) {
     console.log("[BILLBOARD_PATCH]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
@@ -88,6 +88,8 @@ export async function DELETE(
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
+
+    console.log();
 
     if (!params.billboardId) {
       return new NextResponse("Store ID is required", { status: 400 });
@@ -109,6 +111,10 @@ export async function DELETE(
         id: params.billboardId,
       },
     });
+
+    if (billboard.count === 0) {
+      return new NextResponse("Billboard not found", { status: 404 });
+    }
 
     return NextResponse.json({ mesasge: "Billboard deleted", billboard });
   } catch (error) {

@@ -34,7 +34,7 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(store);
+    return NextResponse.json({ mesasge: "Store updated", store });
   } catch (error) {
     console.log("[STORE_PATCH]", error);
     return new NextResponse("Internal Server Error", { status: 500 });

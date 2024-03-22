@@ -51,7 +51,7 @@ export async function POST(
       },
     });
 
-    return NextResponse.json(billboard);
+    return NextResponse.json({ mesasge: "Billboard created", billboard });
   } catch (error) {
     console.log("[BILLBOARDS_POST]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
