@@ -39,7 +39,6 @@ interface BillboardFormProps {
 export default function BillboardForm({ initialData }: BillboardFormProps) {
   const params = useParams();
   const router = useRouter();
-  const origin = useOrigin();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -71,6 +70,7 @@ export default function BillboardForm({ initialData }: BillboardFormProps) {
       }
 
       router.refresh();
+      router.push(`/${params.storeId}/billboards`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("An error occurred. Please try again.");
@@ -131,6 +131,7 @@ export default function BillboardForm({ initialData }: BillboardFormProps) {
               <FormItem>
                 <FormLabel>Background image</FormLabel>
                 <FormControl>
+                  {/* TODO: Delete images from hosting */}
                   <ImageUpload
                     value={field.value ? [field.value] : []}
                     disabled={loading}
