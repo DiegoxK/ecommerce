@@ -14,6 +14,7 @@ import Heading from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useOrigin } from "@/hooks/use-origin";
+import ImageUpload from "@/components/ui/image-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Billboard } from "@prisma/client";
 import axios from "axios";
@@ -120,7 +121,14 @@ export default function BillboardForm({ initialData }: BillboardFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Background image</FormLabel>
-                <FormControl></FormControl>
+                <FormControl>
+                  <ImageUpload
+                    value={field.value ? [field.value] : []}
+                    disabled={loading}
+                    onChange={(url) => field.onChange(url)}
+                    onRemove={() => field.onChange("")}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
