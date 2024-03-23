@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import ImageUpload from "@/components/ui/image-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Size } from "@prisma/client";
+import { Color } from "@prisma/client";
 import axios from "axios";
 import { Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -25,28 +25,30 @@ import * as z from "zod";
 
 const formSchema = z.object({
   name: z.string().min(1),
-  value: z.string().min(1),
+  value: z.string().min(4).regex(/^#/, {
+    message: "String must be a valid hex color.",
+  }),
 });
 
-type SizeFormValues = z.infer<typeof formSchema>;
+type ColorFormValues = z.infer<typeof formSchema>;
 
-interface SizeFormProps {
-  initialData: Size | null;
+interface ColorFormProps {
+  initialData: Color | null;
 }
 
-export default function SizeForm({ initialData }: SizeFormProps) {
+export default function ColorForm({ initialData }: ColorFormProps) {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? "Edit Size" : "Create Size";
-  const description = initialData ? "Edit Size" : "Add a new size.";
-  const toastMessage = initialData ? "Size updated" : "Size created.";
+  const title = initialData ? "Edit Color" : "Create Color";
+  const description = initialData ? "Edit Color" : "Add a new color.";
+  const toastMessage = initialData ? "Color updated" : "Color created.";
   const action = initialData ? "Save Changes" : "Create";
 
-  const form = useForm<SizeFormValues>({
+  const form = useForm<ColorFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData ?? {
       name: "",
@@ -54,22 +56,22 @@ export default function SizeForm({ initialData }: SizeFormProps) {
     },
   });
 
-  const onSubmit = async (data: SizeFormValues) => {
+  const onSubmit = async (data: ColorFormValues) => {
     try {
       setLoading(true);
 
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/sizes/${params.sizeId}`,
+          `/api/${params.storeId}/colors/${params.colorId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/sizes`, data);
+        await axios.post(`/api/${params.storeId}/colors`, data);
       }
 
       // router.refresh();
-      // router.push(`/${params.storeId}/sizes`);
-      window.location.assign(`/${params.storeId}/sizes`);
+      // router.push(`/${params.storeId}/colors`);
+      window.location.assign(`/${params.storeId}/colors`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("An error occurred. Please try again.");
@@ -81,14 +83,14 @@ export default function SizeForm({ initialData }: SizeFormProps) {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/sizes/${params.sizeId}`);
+      await axios.delete(`/api/${params.storeId}/colors/${params.colorId}`);
       // router.refresh();
-      // router.push(`/${params.storeId}/sizes`);
-      window.location.assign(`/${params.storeId}/sizes`);
-      toast.success("Size deleted.");
+      // router.push(`/${params.storeId}/colors`);
+      window.location.assign(`/${params.storeId}/colors`);
+      toast.success("Color deleted.");
     } catch (error) {
       toast.error(
-        "Make sure you removed all categories using this size first."
+        "Make sure you removed all categories using this color first."
       );
     } finally {
       setLoading(false);
@@ -110,7 +112,7 @@ export default function SizeForm({ initialData }: SizeFormProps) {
           <Button
             disabled={loading}
             variant="destructive"
-            size="icon"
+            color="icon"
             onClick={() => setOpen(true)}
           >
             <Trash className="h-4 w-4" />
@@ -129,10 +131,10 @@ export default function SizeForm({ initialData }: SizeFormProps) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Color Name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Size Name"
+                      placeholder="Color Name"
                       disabled={loading}
                       {...field}
                     />
@@ -148,11 +150,19 @@ export default function SizeForm({ initialData }: SizeFormProps) {
                 <FormItem>
                   <FormLabel>Value</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Size Value"
-                      disabled={loading}
-                      {...field}
-                    />
+                    <div className="flex items-center gap-x-4">
+                      <Input
+                        placeholder="Color Value"
+                        disabled={loading}
+                        {...field}
+                      />
+                      <div
+                        className="border p-4 rounded-full "
+                        style={{
+                          backgroundColor: field.value,
+                        }}
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
