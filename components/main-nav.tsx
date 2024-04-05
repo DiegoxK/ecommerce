@@ -9,55 +9,27 @@ export default function MainNav({
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
   const pathname = usePathname();
-  const params = useParams();
+  const { storeId } = useParams();
 
   const routes = [
-    {
-      href: `/${params.storeId}`,
-      label: "Overview",
-      active: pathname === `/${params.storeId}`,
-    },
-    {
-      href: `/${params.storeId}/billboards`,
-      label: "Billboards",
-      active: pathname === `/${params.storeId}/billboards`,
-    },
-    {
-      href: `/${params.storeId}/categories`,
-      label: "Categories",
-      active: pathname === `/${params.storeId}/categories`,
-    },
-    {
-      href: `/${params.storeId}/sizes`,
-      label: "Sizes",
-      active: pathname === `/${params.storeId}/sizes`,
-    },
-    {
-      href: `/${params.storeId}/colors`,
-      label: "Colors",
-      active: pathname === `/${params.storeId}/colors`,
-    },
-    {
-      href: `/${params.storeId}/products`,
-      label: "Products",
-      active: pathname === `/${params.storeId}/products`,
-    },
-    {
-      href: `/${params.storeId}/settings`,
-      label: "Settings",
-      active: pathname === `/${params.storeId}/settings`,
-    },
+    { path: "", label: "Overview" },
+    { path: "billboards", label: "Billboards" },
+    { path: "categories", label: "Categories" },
+    { path: "sizes", label: "Sizes" },
+    { path: "colors", label: "Colors" },
+    { path: "products", label: "Products" },
+    { path: "settings", label: "Settings" },
   ];
 
   return (
     <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)}>
       {routes.map((route) => (
         <Link
-          key={route.href}
-          href={route.href}
+          key={route.path}
+          href={`/${storeId}/${route.path}`}
           className={cn(
             "text-sm font-medium transition-colors hover:text-primary",
-            route.active
+            pathname === `/${storeId}/${route.path}`
               ? "text-black dark:text-white"
               : "text-muted-foreground"
           )}
