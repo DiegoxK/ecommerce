@@ -29,32 +29,20 @@ export async function POST(
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
-    if (!name) {
-      return new NextResponse("Name is required", { status: 400 });
-    }
+    const requiredFields = [
+      { field: name, message: "Name is required" },
+      { field: images && images.length, message: "Images are required" },
+      { field: price, message: "Price URL is required" },
+      { field: categoryId, message: "Category ID is required" },
+      { field: sizeId, message: "Size ID is required" },
+      { field: colorId, message: "Color ID is required" },
+      { field: params.storeId, message: "Store ID is required" },
+    ];
 
-    if (!images || !images.length) {
-      return new NextResponse("Images are required", { status: 400 });
-    }
-
-    if (!price) {
-      return new NextResponse("Price URL is required", { status: 400 });
-    }
-
-    if (!categoryId) {
-      return new NextResponse("Category ID is required", { status: 400 });
-    }
-
-    if (!sizeId) {
-      return new NextResponse("Size ID is required", { status: 400 });
-    }
-
-    if (!colorId) {
-      return new NextResponse("Color ID is required", { status: 400 });
-    }
-
-    if (!params.storeId) {
-      return new NextResponse("Store ID is required", { status: 400 });
+    for (const { field, message } of requiredFields) {
+      if (!field) {
+        return new NextResponse(message, { status: 400 });
+      }
     }
 
     const storeByUserId = await prismadb.store.findFirst({
