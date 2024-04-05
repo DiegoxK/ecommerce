@@ -79,7 +79,7 @@ export async function GET(
 
     return NextResponse.json(categories);
   } catch (error) {
-    console.log("[CATEGORIES_POST]", error);
+    console.log("[CATEGORIES_GET]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
