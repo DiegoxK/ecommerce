@@ -18,6 +18,7 @@ export default function MainNav({
     { path: "sizes", label: "Sizes" },
     { path: "colors", label: "Colors" },
     { path: "products", label: "Products" },
+    { path: "orders", label: "Orders" },
     { path: "settings", label: "Settings" },
   ];
 
