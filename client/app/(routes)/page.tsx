@@ -1,3 +1,12 @@
+import Billboard from "@/components/billboard";
+import Container from "@/components/ui/container";
+
 export default function Home() {
-  return <div>Hello Store!@</div>;
+  return (
+    <Container>
+      <div>
+        <Billboard />
+      </div>
+    </Container>
+  );
 }
