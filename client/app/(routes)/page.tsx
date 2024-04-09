@@ -8,8 +8,6 @@ export default async function Home() {
   const products = await getProducts({ isFeatured: true });
   const billboard = await getBillboard("52b79dd1-66fa-4a7e-8774-c7a33b37151b");
 
-  console.log(products);
-
   return (
     <Container>
       <div className="space-y-10 pb-10">
