@@ -32,6 +32,11 @@ export default function ProductCard({ data }: ProductCardProps) {
           </div>
         </div>
       </div>
+      <div>
+        <p>{data.name}</p>
+        <p>{data.category?.name}</p>
+      </div>
+      <div></div>
     </div>
   );
 }
