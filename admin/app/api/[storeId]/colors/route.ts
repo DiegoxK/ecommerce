@@ -1,3 +1,4 @@
+import { revalidate } from "@/actions/revalidate";
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -51,7 +52,9 @@ export async function POST(
       },
     });
 
-    return NextResponse.json({ mesasge: "Color created", color });
+    const { revalidated } = await revalidate();
+
+    return NextResponse.json({ mesasge: "Color created", color, revalidated });
   } catch (error) {
     console.log("[COLORS_POST]", error);
     return new NextResponse("Internal Server Error", { status: 500 });

@@ -1,3 +1,4 @@
+import { revalidate } from "@/actions/revalidate";
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -75,7 +76,9 @@ export async function PATCH(
       return new NextResponse("Size not found", { status: 404 });
     }
 
-    return NextResponse.json({ mesasge: "Size updated", size });
+    const { revalidated } = await revalidate();
+
+    return NextResponse.json({ mesasge: "Size updated", size, revalidated });
   } catch (error) {
     console.log("[SIZE_PATCH]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
@@ -118,7 +121,9 @@ export async function DELETE(
       return new NextResponse("Size not found", { status: 404 });
     }
 
-    return NextResponse.json({ mesasge: "Size deleted", size });
+    const { revalidated } = await revalidate();
+
+    return NextResponse.json({ mesasge: "Size deleted", size, revalidated });
   } catch (error) {
     console.log("[SIZE_DELETE]", error);
     return new NextResponse("Internal Server Error", { status: 500 });

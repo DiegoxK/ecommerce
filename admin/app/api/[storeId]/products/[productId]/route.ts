@@ -1,3 +1,4 @@
+import { revalidate } from "@/actions/revalidate";
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -116,7 +117,13 @@ export async function PATCH(
       return new NextResponse("Product not found", { status: 404 });
     }
 
-    return NextResponse.json({ mesasge: "Product updated", product });
+    const { revalidated } = await revalidate();
+
+    return NextResponse.json({
+      mesasge: "Product updated",
+      product,
+      revalidated,
+    });
   } catch (error) {
     console.log("[PRODUCT_PATCH]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
@@ -159,7 +166,13 @@ export async function DELETE(
       return new NextResponse("Product not found", { status: 404 });
     }
 
-    return NextResponse.json({ mesasge: "Product deleted", product });
+    const { revalidated } = await revalidate();
+
+    return NextResponse.json({
+      mesasge: "Product deleted",
+      product,
+      revalidated,
+    });
   } catch (error) {
     console.log("[PRODUCT_DELETE]", error);
     return new NextResponse("Internal Server Error", { status: 500 });

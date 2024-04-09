@@ -1,3 +1,4 @@
+import { revalidate } from "@/actions/revalidate";
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -51,7 +52,13 @@ export async function POST(
       },
     });
 
-    return NextResponse.json({ mesasge: "Billboard created", billboard });
+    const { revalidated } = await revalidate();
+
+    return NextResponse.json({
+      mesasge: "Billboard created",
+      billboard,
+      revalidated,
+    });
   } catch (error) {
     console.log("[BILLBOARDS_POST]", error);
     return new NextResponse("Internal Server Error", { status: 500 });

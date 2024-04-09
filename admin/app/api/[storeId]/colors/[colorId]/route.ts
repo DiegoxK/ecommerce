@@ -1,3 +1,4 @@
+import { revalidate } from "@/actions/revalidate";
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -75,7 +76,9 @@ export async function PATCH(
       return new NextResponse("Color not found", { status: 404 });
     }
 
-    return NextResponse.json({ mesasge: "Color updated", color });
+    const { revalidated } = await revalidate();
+
+    return NextResponse.json({ mesasge: "Color updated", color, revalidated });
   } catch (error) {
     console.log("[COLOR_PATCH]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
@@ -118,7 +121,9 @@ export async function DELETE(
       return new NextResponse("Color not found", { status: 404 });
     }
 
-    return NextResponse.json({ mesasge: "Color deleted", color });
+    const { revalidated } = await revalidate();
+
+    return NextResponse.json({ mesasge: "Color deleted", color, revalidated });
   } catch (error) {
     console.log("[COLOR_DELETE]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
