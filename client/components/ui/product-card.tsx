@@ -4,6 +4,7 @@ import { Product } from "@/types";
 import Image from "next/image";
 import IconButton from "@/components/ui/icon-button";
 import { Expand, ShoppingCart } from "lucide-react";
+import Currency from "@/components/ui/currency";
 
 interface ProductCardProps {
   data: Product;
@@ -36,7 +37,9 @@ export default function ProductCard({ data }: ProductCardProps) {
         <p>{data.name}</p>
         <p>{data.category?.name}</p>
       </div>
-      <div></div>
+      <div className="flex items-center justify-between">
+        <Currency value={data.price} />
+      </div>
     </div>
   );
 }
