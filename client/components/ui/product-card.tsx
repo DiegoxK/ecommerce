@@ -6,6 +6,7 @@ import IconButton from "@/components/ui/icon-button";
 import { Expand, ShoppingCart } from "lucide-react";
 import Currency from "@/components/ui/currency";
 import { useRouter } from "next/navigation";
+import getProducts from "@/actions/get-products";
 
 interface ProductCardProps {
   data: Product;
