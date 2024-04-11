@@ -66,7 +66,7 @@ export default function CheckoutForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 ">
         <h2 className="text-lg border-t border-gray-200 font-medium pt-4 mt-8 text-gray-900">
-          Payment Information
+          Contact Information
         </h2>
         <FormField
           control={form.control}
