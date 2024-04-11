@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Color, Size } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -51,8 +51,8 @@ export default function Filter({ name, data, valueKey }: FilterProps) {
         {data.map((filter) => (
           <div key={filter.id} className="flex items-center">
             <Button
+              variant="outline"
               className={cn(
-                "rounded-md text-sm text-gray-800 p-2 bg-white border border-gray-300",
                 selectedValue === filter.id && "bg-gray-800 text-white"
               )}
               onClick={() => onClick(filter.id)}

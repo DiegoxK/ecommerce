@@ -1,13 +1,24 @@
+"use client";
+
 import { Product } from "@/types";
 import Currency from "./ui/currency";
-import Button from "./ui/button";
+import { Button } from "./ui/button";
 import { ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface InfoProps {
   data: Product;
 }
 
 export default function Info({ data }: InfoProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
+
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900">{data.name}</h1>
