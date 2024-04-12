@@ -1,6 +1,13 @@
+import Currency from "@/components/ui/currency";
 import { ValidationDetails } from "@/types";
 import axios from "axios";
-import { CheckCircle, CircleUserRound, ReceiptText, Truck } from "lucide-react";
+import {
+  CheckCircle,
+  CircleUserRound,
+  ReceiptText,
+  ShoppingBagIcon,
+  Truck,
+} from "lucide-react";
 
 export default async function ResponsePage({
   searchParams,
@@ -73,6 +80,17 @@ export default async function ResponsePage({
             <p>
               <span className="font-semibold">Phone: </span>
               {data.x_extra3}
+            </p>
+          </div>
+          <hr />
+          <div className="flex items-center gap-2">
+            <ShoppingBagIcon size={40} />
+            <p className="uppercase font-semibold">Order Summary</p>
+          </div>
+          <div>
+            <p>
+              <span className="font-bold">TOTAL: </span>
+              <Currency value={data.x_amount} />
             </p>
           </div>
         </div>
