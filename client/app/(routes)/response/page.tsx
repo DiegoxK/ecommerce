@@ -88,8 +88,8 @@ export default async function ResponsePage({
             <p className="uppercase font-semibold">Order Summary</p>
           </div>
           <div>
-            <p>
-              <span className="font-bold">TOTAL: </span>
+            <p className="flex gap-2">
+              <span>TOTAL: </span>
               <Currency value={data.x_amount} />
             </p>
           </div>
