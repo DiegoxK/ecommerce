@@ -56,8 +56,6 @@ export async function POST(req: NextRequest) {
     return total + Number(item.product.price);
   }, 0);
 
-  //TODO: Comparar invoice value with x_ref_payco and x_amount desde el modelo de orders
-
   if (x_id_invoice === numOrder && x_amount === valueOrder) {
     // Calcular la firma
     const signature = createHash("sha256")
