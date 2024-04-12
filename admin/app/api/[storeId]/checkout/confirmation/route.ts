@@ -13,7 +13,10 @@ import { NextRequest, NextResponse } from "next/server";
 //   return NextResponse.json({}, { headers: corsHeaders });
 // }
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  _req: NextRequest,
+  { params }: { params: ConfirmationParams }
+) {
   // Variables recibidas desde ePayco
   const {
     x_id_invoice,
@@ -24,7 +27,7 @@ export async function POST(req: NextRequest) {
     x_signature,
     x_cod_response,
     x_extra4,
-  }: ConfirmationParams = await req.json();
+  }: ConfirmationParams = params;
 
   // Valores de configuración de ePayco
   const p_cust_id_cliente = process.env.P_CUST_ID_CLIENTE;
