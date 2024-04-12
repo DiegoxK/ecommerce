@@ -37,6 +37,39 @@ export const getAuthToken = async () => {
   }
 };
 
+export const generateInvoiceCode = () => {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const prefix =
+    letters.charAt(Math.floor(Math.random() * 26)) +
+    letters.charAt(Math.floor(Math.random() * 26)) +
+    letters.charAt(Math.floor(Math.random() * 26));
+  const number = Math.floor(Math.random() * 10000);
+  const paddedNumber = number.toString().padStart(4, "0");
+
+  return `${prefix}-${paddedNumber}`;
+};
+
+export const validateIp = (ip: string) => {
+  const ipRegex =
+    /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
+  const privateIpRanges = [
+    /^0\..*/, // 0.0.0.0/8
+    /^127\..*/, // 127.0.0.0/8
+    /^10\..*/, // 10.0.0.0/8
+    /^172\.(1[6-9]|2[0-9]|3[0-1])\..*/, // 172.16.0.0/12
+    /^192\.168\..*/, // 192.168.0.0/16
+  ];
+
+  if (!ipRegex.test(ip)) return false;
+
+  for (const range of privateIpRanges) {
+    if (range.test(ip)) return false;
+  }
+
+  return true;
+};
+
 // interface RequestWithBody extends Request {
 //   body: {
 //     data: {

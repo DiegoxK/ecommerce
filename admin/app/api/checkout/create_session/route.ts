@@ -1,8 +1,104 @@
-import { getAuthToken, url_apify } from "@/lib/epayco";
+import {
+  generateInvoiceCode,
+  getAuthToken,
+  url_apify,
+  validateIp,
+} from "@/lib/epayco";
+import prismadb from "@/lib/prismadb";
+import { PaymentDetails } from "@/types/epayco";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
-  const body = await req.json();
+// const corsHeaders = {
+//   "Access-Control-Allow-Origin": "*",
+//   "Access-Control-Allow-Methods": "POST",
+//   "Access-Control-Allow-Headers": "Content-Type, Authorization",
+// };
+
+// export async function OPTIONS() {
+//   return NextResponse.json({}, { headers: corsHeaders });
+// }
+
+interface RequestBody {
+  paymentDetails: PaymentDetails;
+  productIds: string[];
+}
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { storeId: string } }
+) {
+  const { paymentDetails, productIds }: RequestBody = await req.json();
+
+  const requiredFields = [
+    {
+      field: productIds && productIds.length === 0,
+      message: "Product IDs are required",
+    },
+    { field: paymentDetails.currency, message: "Currency is required" },
+    { field: paymentDetails.amount, message: "Amount is required" },
+    { field: paymentDetails.country, message: "Country is required" },
+    { field: paymentDetails.test, message: "Test is required" },
+    { field: paymentDetails.ip, message: "IP is required" },
+  ];
+
+  for (const { field, message } of requiredFields) {
+    if (!field) {
+      return new NextResponse(message, { status: 400 });
+    }
+  }
+
+  if (!validateIp(paymentDetails.ip)) {
+    return NextResponse.json(
+      { message: "Invalid IP address" },
+      { status: 400 }
+    );
+  }
+
+  const products = await prismadb.product.findMany({
+    where: {
+      id: {
+        in: productIds,
+      },
+    },
+  });
+
+  const order = await prismadb.order.create({
+    data: {
+      storeId: params.storeId,
+      isPaid: false,
+      invoiceCode: generateInvoiceCode(),
+      orderItems: {
+        create: productIds.map((productId) => ({
+          product: {
+            connect: {
+              id: productId,
+            },
+          },
+        })),
+      },
+    },
+  });
+
+  paymentDetails.name = products.map((product) => product.name).join("| ");
+  paymentDetails.description = products
+    .map((product) => product.description)
+    .join("| ");
+
+  paymentDetails.invoice = order.invoiceCode;
+
+  paymentDetails.extra1 = paymentDetails.nameBilling
+    ? paymentDetails.nameBilling
+    : "";
+
+  paymentDetails.extra2 = paymentDetails.addressBilling
+    ? paymentDetails.addressBilling
+    : "";
+
+  paymentDetails.extra3 = paymentDetails.mobilephoneBilling
+    ? paymentDetails.mobilephoneBilling
+    : "";
+
+  paymentDetails.extra4 = order.id;
 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -18,7 +114,7 @@ export async function POST(req: NextRequest) {
   const requestOptions = {
     method: "POST",
     headers: myHeaders,
-    body: JSON.stringify(body),
+    body: JSON.stringify(paymentDetails),
     redirect: "follow" as RequestRedirect,
   };
 
