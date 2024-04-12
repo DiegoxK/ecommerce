@@ -92,8 +92,8 @@ export default function CheckoutForm({
         ip,
         lang: "es",
         country: "co",
-        confirmation: "https://nextjs-dashboard-ten-sigma-10.vercel.app",
-        // response: "http://example.com/response",
+        confirmation: `${process.env.NEXT_PUBLIC_API_URL}/checkout/confirmation`,
+        response: "https://ecommerce-epayco-test.vercel.app",
       };
 
       try {
