@@ -42,9 +42,9 @@ const formSchema = z.object({
   name: z.string().min(1).max(50),
   lastName: z.string().min(1).max(50),
   addressBilling: z.string().min(1).max(50),
-  mobilePhoneBilling: z.string().min(1).max(50),
+  mobilePhoneBilling: z.string().min(1).max(11),
   emailBilling: z.string().email(),
-  numberDocBilling: z.string().regex(/^\d+$/).min(1).max(12),
+  numberDocBilling: z.string().regex(/^\d+$/).min(1).max(20),
   typeDocBilling: z.string().min(1).max(50),
 });
 
@@ -86,37 +86,38 @@ export default function CheckoutForm({
         typeDocBilling: values.typeDocBilling,
         name: products.map((product) => product.name).join("| "),
         description: products.map((product) => product.description).join("| "),
-        currency: "cop",
         amount: String(totalPrice),
-        test: true,
+        currency: "cop",
+        test: "true",
         ip,
-        country: "CO",
-        response: `http://localhost:3000/cart/response`,
-        confirmation: `http://localhost:3000/cart/confirmation`,
-        acepted: `http://localhost:3000/cart/acepted`,
-        rejected: `http://localhost:3000/cart/rejected`,
-        pending: `http://localhost:3000/cart/pending`,
+        lang: "es",
+        country: "co",
+        confirmation: "https://nextjs-dashboard-ten-sigma-10.vercel.app",
+        // response: "http://example.com/response",
       };
 
-      const {
-        data: { sessionId },
-      } = await axios.post<{
-        sessionId: string;
-      }>(`${process.env.NEXT_PUBLIC_API_URL}/api/checkout/create_session`, {
-        paymentDetails,
-        productIds: products.map((product) => product.id),
-      });
+      try {
+        const {
+          data: { sessionId },
+        } = await axios.post<{
+          sessionId: string;
+        }>(`${process.env.NEXT_PUBLIC_API_URL}/checkout/create_session`, {
+          paymentDetails,
+          productIds: products.map((product) => product.id),
+        });
 
-      const handler = checkout.configure({
-        sessionId,
-        external: true,
-      });
+        const handler = checkout.configure({
+          sessionId,
+          external: true,
+        });
 
-      handler.openNew();
+        handler.openNew();
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       console.log("ePayco failed to load.");
     }
-    console.log(values);
   };
 
   return (

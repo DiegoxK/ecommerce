@@ -31,7 +31,7 @@ export async function POST(
 
   const requiredFields = [
     {
-      field: productIds && productIds.length === 0,
+      field: productIds && productIds.length,
       message: "Product IDs are required",
     },
     { field: paymentDetails.nameBilling, message: "Buyer name is required" },
@@ -110,6 +110,8 @@ export async function POST(
 
   myHeaders.append("Authorization", `Bearer ${token}`);
 
+  console.log(paymentDetails);
+
   const requestOptions = {
     method: "POST",
     headers: myHeaders,
@@ -127,9 +129,21 @@ export async function POST(
       throw new Error(`HTTP Error: ${response.status}`);
     }
 
-    const result = await response.text();
+    const result = JSON.parse(await response.text());
 
-    return NextResponse.json({ sessionId: JSON.parse(result).data.sessionId });
+    if (result.success === false) {
+      return NextResponse.json(
+        { message: result.textResponse, errors: result.data.errors },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        sessionId: result.data.sessionId,
+      },
+      { headers: corsHeaders }
+    );
   } catch (error) {
     console.error("Error getting the Session Id:", error);
 

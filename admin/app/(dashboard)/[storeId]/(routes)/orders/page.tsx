@@ -31,6 +31,7 @@ export default async function OrdersPage({
     id: order.id,
     phone: order.phone,
     address: order.address,
+    invoiceCode: order.invoiceCode,
     products: order.orderItems
       .map((orderItem) => orderItem.product.name)
       .join(", "),

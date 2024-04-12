@@ -51,7 +51,7 @@ export interface PaymentDetails {
   methodsDisable?: string[];
   response?: string;
   confirmation?: string;
-  test: boolean;
+  test: string;
   ip: string;
   invoice?: string;
   extra1?: string;
