@@ -34,6 +34,20 @@ export async function POST(
       field: productIds && productIds.length === 0,
       message: "Product IDs are required",
     },
+    { field: paymentDetails.nameBilling, message: "Buyer name is required" },
+    {
+      field: paymentDetails.addressBilling,
+      message: "Buyer address is required",
+    },
+    {
+      field: paymentDetails.mobilephoneBilling,
+      message: "Buyer phone is required",
+    },
+    { field: paymentDetails.name, message: "Product/s name is required" },
+    {
+      field: paymentDetails.description,
+      message: "Product/s description is required",
+    },
     { field: paymentDetails.currency, message: "Currency is required" },
     { field: paymentDetails.amount, message: "Amount is required" },
     { field: paymentDetails.country, message: "Country is required" },
@@ -79,26 +93,11 @@ export async function POST(
     },
   });
 
-  paymentDetails.name = products.map((product) => product.name).join("| ");
-  paymentDetails.description = products
-    .map((product) => product.description)
-    .join("| ");
-
-  paymentDetails.invoice = order.invoiceCode;
-
-  paymentDetails.extra1 = paymentDetails.nameBilling
-    ? paymentDetails.nameBilling
-    : "";
-
-  paymentDetails.extra2 = paymentDetails.addressBilling
-    ? paymentDetails.addressBilling
-    : "";
-
-  paymentDetails.extra3 = paymentDetails.mobilephoneBilling
-    ? paymentDetails.mobilephoneBilling
-    : "";
-
+  paymentDetails.extra1 = paymentDetails.nameBilling;
+  paymentDetails.extra2 = paymentDetails.addressBilling;
+  paymentDetails.extra3 = paymentDetails.mobilephoneBilling;
   paymentDetails.extra4 = order.id;
+  paymentDetails.invoice = order.invoiceCode;
 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");

@@ -14,6 +14,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Check, ChevronsUpDown } from "lucide-react";
+
 import {
   Command,
   CommandEmpty,
@@ -22,16 +23,20 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, getIp } from "@/lib/utils";
 import { documentTypes } from "./options";
 import { useState } from "react";
 import Script from "next/script";
+import { PaymentDetails, Product } from "@/types";
+import axios from "axios";
 
 const formSchema = z.object({
   name: z.string().min(1).max(50),
@@ -43,7 +48,15 @@ const formSchema = z.object({
   typeDocBilling: z.string().min(1).max(50),
 });
 
-export default function CheckoutForm() {
+interface CheckoutFormProps {
+  products: Product[];
+  totalPrice: number | string;
+}
+
+export default function CheckoutForm({
+  products,
+  totalPrice,
+}: CheckoutFormProps) {
   const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,14 +72,52 @@ export default function CheckoutForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (typeof window !== "undefined" && window.ePayco) {
       const checkout = window.ePayco.checkout;
+      const ip = await getIp();
+
+      const paymentDetails: PaymentDetails = {
+        nameBilling: `${values.name} ${values.lastName}`,
+        emailBilling: values.emailBilling,
+        addressBilling: values.addressBilling,
+        mobilephoneBilling: values.mobilePhoneBilling,
+        numberDocBilling: values.numberDocBilling,
+        typeDocBilling: values.typeDocBilling,
+        name: products.map((product) => product.name).join("| "),
+        description: products.map((product) => product.description).join("| "),
+        currency: "cop",
+        amount: String(totalPrice),
+        test: true,
+        ip,
+        country: "CO",
+        response: `http://localhost:3000/cart/response`,
+        confirmation: `http://localhost:3000/cart/confirmation`,
+        acepted: `http://localhost:3000/cart/acepted`,
+        rejected: `http://localhost:3000/cart/rejected`,
+        pending: `http://localhost:3000/cart/pending`,
+      };
+
+      const {
+        data: { sessionId },
+      } = await axios.post<{
+        sessionId: string;
+      }>(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/checkout/create_session`,
+        paymentDetails
+      );
+
+      const handler = checkout.configure({
+        sessionId,
+        external: true,
+      });
+
+      handler.openNew();
     } else {
       console.log("ePayco failed to load.");
     }
     console.log(values);
-  }
+  };
 
   return (
     <>

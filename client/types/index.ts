@@ -14,6 +14,7 @@ export interface Product {
   id: string;
   category: Category;
   name: string;
+  description: string;
   price: string;
   isFeatured: boolean;
   size: Size;
@@ -36,4 +37,45 @@ export interface Color {
   id: string;
   name: string;
   value: string;
+}
+
+export interface PaymentDetails {
+  name: string;
+  description: string;
+  currency: string;
+  amount: string;
+  taxBase?: string;
+  tax?: string;
+  country: string;
+  lang?: string;
+  methodsDisable?: string[];
+  response?: string;
+  confirmation?: string;
+  test: boolean;
+  ip: string;
+  invoice?: string;
+  extra1?: string;
+  extra2?: string;
+  extra3?: string;
+  extra4?: string;
+  extra5?: string;
+  extra6?: string;
+  extra7?: string;
+  extra8?: string;
+  extra9?: string;
+  extra10?: string;
+  extra11?: string;
+  acepted?: string;
+  rejected?: string;
+  pending?: string;
+  method?: string;
+  autoclick?: string;
+  emailBilling?: string;
+  nameBilling?: string;
+  addressBilling?: string;
+  typeDocBilling?: string;
+  numberDocBilling?: string;
+  mobilephoneBilling?: string;
+  taxIco?: string;
+  uniqueTransactionPerBill?: boolean;
 }

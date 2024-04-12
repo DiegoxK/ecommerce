@@ -36,7 +36,7 @@ export default function Summary() {
         </div>
         <Currency value={totalPrice} />
       </div>
-      <CheckoutForm />
+      <CheckoutForm products={items} totalPrice={totalPrice} />
     </div>
   );
 }
