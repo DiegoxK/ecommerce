@@ -8,15 +8,15 @@ import prismadb from "@/lib/prismadb";
 import { PaymentDetails } from "@/types/epayco";
 import { NextRequest, NextResponse } from "next/server";
 
-// const corsHeaders = {
-//   "Access-Control-Allow-Origin": "*",
-//   "Access-Control-Allow-Methods": "POST",
-//   "Access-Control-Allow-Headers": "Content-Type, Authorization",
-// };
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
 
-// export async function OPTIONS() {
-//   return NextResponse.json({}, { headers: corsHeaders });
-// }
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
 
 interface RequestBody {
   paymentDetails: PaymentDetails;
@@ -68,13 +68,13 @@ export async function POST(
     );
   }
 
-  const products = await prismadb.product.findMany({
-    where: {
-      id: {
-        in: productIds,
-      },
-    },
-  });
+  // const products = await prismadb.product.findMany({
+  //   where: {
+  //     id: {
+  //       in: productIds,
+  //     },
+  //   },
+  // });
 
   const order = await prismadb.order.create({
     data: {

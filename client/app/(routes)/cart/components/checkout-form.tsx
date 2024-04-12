@@ -102,10 +102,10 @@ export default function CheckoutForm({
         data: { sessionId },
       } = await axios.post<{
         sessionId: string;
-      }>(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/checkout/create_session`,
-        paymentDetails
-      );
+      }>(`${process.env.NEXT_PUBLIC_API_URL}/api/checkout/create_session`, {
+        paymentDetails,
+        productIds: products.map((product) => product.id),
+      });
 
       const handler = checkout.configure({
         sessionId,
