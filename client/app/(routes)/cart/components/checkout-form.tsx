@@ -95,7 +95,7 @@ export default function CheckoutForm({
         lang: "es",
         country: "co",
         confirmation: `${process.env.NEXT_PUBLIC_API_URL}/checkout/confirmation`,
-        response: "http://localhost:3000/response",
+        response: "https://ecommerce-epayco-test.vercel.app/response",
       };
 
       try {
