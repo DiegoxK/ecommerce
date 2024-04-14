@@ -3,20 +3,20 @@ import prismadb from "@/lib/prismadb";
 import { createHash } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
-// const corsHeaders = {
-//   "Access-Control-Allow-Origin": "*",
-//   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-//   "Access-Control-Allow-Headers": "Content-Type, Authorization",
-// };
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
 
-// export async function OPTIONS() {
-//   return NextResponse.json({}, { headers: corsHeaders });
-// }
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
 
 export async function POST(req: NextRequest) {
-  const queryParams = Object.fromEntries(req.nextUrl.searchParams.entries());
-
-  console.log(queryParams);
+  const queryParams: ConfirmationParams = Object.fromEntries(
+    req.nextUrl.searchParams.entries()
+  );
 
   // Variables de respuesta de ePayco
   const {

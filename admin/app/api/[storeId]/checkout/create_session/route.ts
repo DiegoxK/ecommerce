@@ -68,18 +68,23 @@ export async function POST(
     );
   }
 
-  // const products = await prismadb.product.findMany({
-  //   where: {
-  //     id: {
-  //       in: productIds,
-  //     },
-  //   },
-  // });
+  const products = await prismadb.product.findMany({
+    where: {
+      id: {
+        in: productIds,
+      },
+    },
+  });
+
+  const ammount = products.reduce((total, item) => {
+    return total + Number(item.price);
+  }, 0);
 
   const order = await prismadb.order.create({
     data: {
       storeId: params.storeId,
       isPaid: false,
+      ammount,
       invoiceCode: generateInvoiceCode(),
       orderItems: {
         create: productIds.map((productId) => ({
@@ -92,6 +97,8 @@ export async function POST(
       },
     },
   });
+
+  console.log("order created");
 
   paymentDetails.extra1 = paymentDetails.nameBilling;
   paymentDetails.extra2 = paymentDetails.addressBilling;
@@ -109,8 +116,6 @@ export async function POST(
   }
 
   myHeaders.append("Authorization", `Bearer ${token}`);
-
-  console.log(paymentDetails);
 
   const requestOptions = {
     method: "POST",

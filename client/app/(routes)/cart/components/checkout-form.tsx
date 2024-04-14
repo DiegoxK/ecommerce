@@ -58,6 +58,7 @@ export default function CheckoutForm({
   totalPrice,
 }: CheckoutFormProps) {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -73,6 +74,7 @@ export default function CheckoutForm({
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setLoading(true);
     if (typeof window !== "undefined" && window.ePayco) {
       const checkout = window.ePayco.checkout;
       const ip = await getIp();
@@ -93,7 +95,7 @@ export default function CheckoutForm({
         lang: "es",
         country: "co",
         confirmation: `${process.env.NEXT_PUBLIC_API_URL}/checkout/confirmation`,
-        response: "https://ecommerce-epayco-test.vercel.app",
+        response: "http://localhost:3000/response",
       };
 
       try {
@@ -281,7 +283,7 @@ export default function CheckoutForm({
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full mt-6">
+          <Button disabled={loading} type="submit" className="w-full mt-6">
             Checkout
           </Button>
         </form>

@@ -108,6 +108,7 @@ model Order {
   store       Store       @relation("StoreToOrder", fields: [storeId], references: [id])
   orderItems  OrderItem[]
   invoiceCode String
+  ammount     Decimal
   isPaid      Boolean     @default(false)
   phone       String      @default("")
   address     String      @default("")

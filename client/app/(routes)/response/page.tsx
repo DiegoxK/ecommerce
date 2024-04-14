@@ -22,6 +22,10 @@ export default async function ResponsePage({
     `https://secure.epayco.co/validation/v1/reference/${ref_payco}`
   );
 
+  // TODO: if succesfull, save the order in the database
+
+  // TODO: fix shopping buttons
+
   const { data } = response.data;
 
   return (

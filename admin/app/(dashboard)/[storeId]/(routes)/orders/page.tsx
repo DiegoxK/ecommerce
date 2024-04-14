@@ -35,11 +35,7 @@ export default async function OrdersPage({
     products: order.orderItems
       .map((orderItem) => orderItem.product.name)
       .join(", "),
-    totalPrice: formatter.format(
-      order.orderItems.reduce((total, item) => {
-        return total + Number(item.product.price);
-      }, 0)
-    ),
+    totalPrice: formatter.format(Number(order.ammount)),
     isPaid: order.isPaid,
     createdAt: format(order.createdAt, "MMM do, yyyy"),
   }));
