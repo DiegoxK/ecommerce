@@ -109,6 +109,7 @@ model Order {
   orderItems  OrderItem[]
   invoiceCode String
   ammount     Decimal
+  status      String      @default("SUBMITTED")
   isPaid      Boolean     @default(false)
   phone       String      @default("")
   address     String      @default("")
